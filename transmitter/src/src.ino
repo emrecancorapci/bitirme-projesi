@@ -1,36 +1,21 @@
-#include <Vector.h>
+#include "./data-controller.h"
 
-void formatSensorValue(char buffer[8], const char* name, float value)
+void setup()
 {
-    char floatBuffer[8];
+  Serial.begin(115200);
 
-    dtostrf(value, 4, 3, floatBuffer); // Convert float to string
-    sprintf(buffer, "%s:%s", name, floatBuffer); // Format string
-}
-
-void setup() {
-  Serial.begin(9600);
-}
-
-void loop() {
-  if(Serial.availableForWrite() > 0) {
-    float humidity = 3.4567;
-    char* name = "HUM";
-    char buffer[8];
-
-    formatSensorValue(buffer, name, humidity);
-
-    Serial.println(buffer);
-  }
-}
-
-void establishContact() { 
   while(!Serial) {
-    // Wait for connection
+    delay(10);
   }
+}
 
-  if (Serial.availableForWrite() <= 0) {
-    Serial.print('Contact Established!');
-    delay(300);
+void loop()
+{
+  if (Serial.availableForWrite() > 0)
+  {
+    float humidity = 3.4567;
+    char *name = "HUM";
+
+    DataController::getInstance()->sendData(name, humidity);
   }
 }
