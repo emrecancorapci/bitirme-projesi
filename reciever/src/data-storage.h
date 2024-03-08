@@ -1,23 +1,22 @@
-#include "lib/set.h"
+#pragma once
+#include "unique-set.h"
 
 class DataStorage
 {
 private:
-    static DataStorage *dataStoragePointer;
-    DataStorage() {}
+    UniqueSet<String, float> *dataSet = new UniqueSet<String, float>();
 
-    Set<String, float> *dataSet = new Set<String, float>();
-    Kvp<String, float> parseData(String dataBuffer);
+    KvPair<String, float> parseData(String dataBuffer) const;
+    const String messageBuffer;
 
 public:
-    DataStorage(const DataStorage &obj) = delete;
-    void operator=(const DataStorage &obj) = delete;
+    void addData(String key, float value) const;
+    void addUnparsedData(String dataBuffer) const;
 
-    static DataStorage *getInstance();
-    void addData(String key, float value);
-    void addUnparsedData(String dataBuffer);
-    void removeData(String key);
-    void clearData();
+    void removeData(String key) const;
+    void clearData() const;
+    void printData() const;
 
-    float getData(String key);
+    float getData(String key) const;
+    String getMessageBuffer() const { return messageBuffer; };
 };

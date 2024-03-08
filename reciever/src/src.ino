@@ -1,36 +1,34 @@
-#include <Vector.h>
-#include "lib/kvp.h"
-#include "lib/set.h"
+#include "data-storage.h"
 
-void setup() {
+const DataStorage* dataStorage = new DataStorage();
+String buffer;
+
+void setup()
+{
   Serial.begin(115200);
-}
 
-void dataParser(String dataBuffer) {
-  const String dataType = dataBuffer.substring(0, 2);
-  const String dataValue = dataBuffer.substring(4, 7);
-}
-
-void loop() {
-  if(Serial.available() > 0) {
-    String buffer = Serial.readString();
+  while (!Serial.available())
+  {
+    delay(100);
   }
-}
-
-void establishContact() { 
-  while(!Serial) {
-    // Wait for connection
+  while (!Serial.availableForWrite())
+  {
+    delay(100);
   }
 
-  if (Serial.available() <= 0) {
-    Serial.print('Contact Established!');
-    delay(300);
-  }
 }
 
-class DataHelper {
-  private:
-    Vector<Kvp<String, float>> data;
-
-
-};
+void loop()
+{
+  if (Serial.available() > 0)
+  {
+    buffer = Serial.readString();
+    // dataStorage->addUnparsedData(buffer);
+  }
+  if (Serial.availableForWrite() > 0)
+  {
+    Serial.println(buffer);
+    // Serial.print(dataStorage->getMessageBuffer());
+    // dataStorage->printData();
+  }
+}

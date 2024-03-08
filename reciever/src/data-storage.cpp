@@ -1,45 +1,48 @@
 #include "data-storage.h"
+#include <Arduino.h>
 
-Kvp<String, float> DataStorage::parseData(String dataBuffer)
+void DataStorage::addData(String key, float value) const
 {
-    const String dataType = dataBuffer.substring(0, 2);
+    dataSet->push(key, value);
+}
+
+void DataStorage::addUnparsedData(String dataBuffer) const
+{
+    KvPair<String, float> parsedData = parseData(dataBuffer);
+    dataSet->push(parsedData.key, parsedData.value);
+
+    // while(!Serial.availableForWrite()){}
+    // Serial.print("Data added: ");
+    // Serial.print(parsedData.key);
+    // Serial.print(" : ");
+    // Serial.println(parsedData.value);
+    // Serial.println(dataBuffer);
+}
+
+KvPair<String, float> DataStorage::parseData(String dataBuffer) const
+{
+    const String dataType = dataBuffer.substring(0, 3);
     const float dataValue = dataBuffer.substring(4, 7).toFloat();
 
-    return Kvp<String, float>(dataType, dataValue);
+    return KvPair<String, float>(dataType, dataValue);
 }
 
-DataStorage *DataStorage::getInstance()
-{
-    if (dataStoragePointer == nullptr)
-    {
-        dataStoragePointer = new DataStorage();
-    }
-
-    return dataStoragePointer;
-}
-
-void DataStorage::addData(String key, float value)
-{
-    dataSet->add(key, value);
-}
-
-void DataStorage::addUnparsedData(String dataBuffer)
-{
-    Kvp<String, float> parsedData = parseData(dataBuffer);
-    dataSet->add(parsedData.key, parsedData.value);
-}
-
-void DataStorage::removeData(String key)
+void DataStorage::removeData(String key) const
 {
     dataSet->remove(key);
 }
 
-void DataStorage::clearData()
+void DataStorage::clearData() const
 {
     dataSet->clear();
 }
 
-float DataStorage::getData(String key)
+float DataStorage::getData(String key) const
 {
     return dataSet->get(key);
+}
+
+void DataStorage::printData() const
+{
+    dataSet->print();
 }
