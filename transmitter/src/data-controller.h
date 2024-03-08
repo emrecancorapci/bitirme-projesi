@@ -1,19 +1,14 @@
 class DataController
 {
 private:
-    static DataController *_dataController; // Singleton instance of DataController
-    DataController() {}                     // Private constructor
-
-    char buffer[8];                                 // Buffer to store formatted string
-    char floatBuffer[8];                            // Buffer to store float as string
-    void storeValue(const char *name, float value); // Format and store value in buffer
-    void sendValue();                               // Send value to serial
-    void cleanBuffers();                            // Clean buffer
+    char buffer[8];                                        // Buffer to store formatted string
+    char floatBuffer[8];                                   // Buffer to store float as string
+    void storeValue(const char *name, const float &value); // Format and store value in buffer
+    void sendValue();                                      // Send value to serial
+    void cleanBuffers();                                   // Clean buffer
 
 public:
-    static DataController *getInstance();            // Get instance of DataController
-    DataController(DataController &obj) = delete;    // Delete copy constructor
-    void operator=(const DataController &) = delete; // Delete assignment operator
+    DataController(){}; // Constructor
 
-    void sendData(const char *name, float value); // Send data to serial
+    void sendData(const char *name, const float &value); // Send data to serial
 };

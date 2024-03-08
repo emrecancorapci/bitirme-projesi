@@ -1,11 +1,14 @@
-#include "./data-controller.h"
+#include "data-controller.h"
+
+const DataController *dataController = new DataController();
 
 void setup()
 {
   Serial.begin(115200);
 
-  while(!Serial) {
-    delay(10);
+  while (!Serial.availableForWrite())
+  {
+    delay(100);
   }
 }
 
@@ -16,6 +19,6 @@ void loop()
     float humidity = 3.4567;
     char *name = "HUM";
 
-    DataController::getInstance()->sendData(name, humidity);
+    dataController->sendData(name, humidity);
   }
 }
