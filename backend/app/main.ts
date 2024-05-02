@@ -1,35 +1,45 @@
+import axios, { AxiosError } from 'axios';
+import * as dotenv from 'dotenv';
 import { SerialPort } from 'serialport';
 
-interface Entity {
-  sensorId: string;
-  value: number;
-  date: Date;
-}
+import { SensorData } from './types';
 
-const database: Entity[] = [];
+dotenv.config();
 
-const serialport = new SerialPort({ path: 'COM3', baudRate: 9600 });
-serialport.on('data', (data: string) => {
+async function onSensorData(data: string): Promise<void> {
   const sensorData = data.toString().split(':');
-  const databaseObject: Entity = {
+  if (sensorData.length !== 2) return console.error('Invalid data format:', sensorData);
+
+  const sensorObject: SensorData = {
     sensorId: sensorData[0],
     value: Number.parseFloat(sensorData[1]),
     date: new Date(),
   };
 
-  database.push(databaseObject);
+  const API_URL = process.env.API_URL;
+  if (!API_URL) throw new Error('API_URL is not defined');
 
-  console.log(database);
-});
+  await axios
+    .post(API_URL, { status: 'active', data: sensorObject })
+    .then((response) => {
+      console.log(response.data);
+    })
+    .catch((error: AxiosError) => {
+      console.error(error.message);
+    });
+}
+
+const serialport = new SerialPort({ path: 'COM3', baudRate: 9600 });
+serialport.on('data', (data: string) => void onSensorData(data));
 
 serialport.on('error', (error) => {
-  console.log(error);
+  console.error(error);
 });
 
 serialport.on('open', () => {
-  console.log('open');
+  console.log('Serial port opened');
 });
 
 serialport.on('close', () => {
-  console.log('close');
+  console.log('Serial port closed');
 });
