@@ -12,7 +12,7 @@ const PORT = Number(process.env.PORT) || 5000;
 
 if (!process.env.MONGO_URI) throw new Error('MONGO_URI must be provided.');
 
-await runDatabase(process.env.MONGO_URI);
+await runDatabase(process.env.MONGO_URI).catch(console.error);
 
 http.createServer(app).listen(PORT);
 https.createServer(app).listen(PORT + 1);
