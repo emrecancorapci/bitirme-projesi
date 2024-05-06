@@ -1,40 +1,28 @@
-import { MongoClient, ServerApiVersion } from 'mongodb';
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const clientCaller = (uri: string) =>
-  new MongoClient(uri, {
+import * as mongoDB from 'mongodb';
+
+export const collections: { data?: mongoDB.Collection } = {};
+
+export async function connectToDatabase() {
+  const uri = process.env.MONGO_URI;
+  if (!uri) throw new Error('MONGO_URI must be provided.');
+
+  const client: mongoDB.MongoClient = new mongoDB.MongoClient(uri, {
     serverApi: {
-      version: ServerApiVersion.v1,
+      version: mongoDB.ServerApiVersion.v1,
       strict: true,
       deprecationErrors: true,
     },
   });
 
-export default async function runDatabase(uri: string) {
-  const client = clientCaller(uri);
-  try {
-    // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
-    // Send a ping to confirm a successful connection
-    await client.db('admin').command({ ping: 1 });
-    console.log('Pinged your deployment. You successfully connected to MongoDB!');
-    return client;
-  } catch (error) {
-    console.error('Error connecting to MongoDB:', error);
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
-  }
-}
+  await client.connect();
 
-export async function crud(databaseName: string, collectionName: string) {
-  const uri = process.env.MONGO_URI;
-  if (!uri) throw new Error('MONGO_URI must be provided.');
-  const mongoClient = await runDatabase(uri);
-  if (!mongoClient) throw new Error('MongoClient not found.');
+  const database: mongoDB.Db = client.db('sensors');
 
-  try {
-    return () => mongoClient.db(databaseName).collection(collectionName);
-  } finally {
-    await mongoClient.close();
-  }
+  const gamesCollection: mongoDB.Collection = database.collection('data-test');
+
+  collections.data = gamesCollection;
+
+  console.log(
+    `Successfully connected to database: ${database.databaseName} and collection: ${gamesCollection.collectionName}`
+  );
 }

@@ -1,7 +1,7 @@
 {
 	"name": "typescript-serialport",
 	"version": "0.0.1",
-	"type": "modules",
+	"type": "module",
 	"main": "app/main.ts",
 	"license": "MIT",
 	"scripts": {
