@@ -4,6 +4,9 @@
     "node": true
   },
   "settings": {
+    "node" : {
+      "version": ">=18.10.0"
+    },
     "import/parsers": {
       "@typescript-eslint/parser": [".ts"]
     },
