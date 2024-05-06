@@ -20,7 +20,7 @@ async function onSensorData(data: string): Promise<void> {
   if (!API_URL) throw new Error('API_URL is not defined');
 
   await axios
-    .post(API_URL, { status: 'active', data: sensorObject })
+    .post(API_URL + '/sensor-data', sensorObject)
     .then((response) => {
       console.log(response.data);
     })
