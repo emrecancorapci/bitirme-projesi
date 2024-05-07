@@ -1,8 +1,11 @@
-import { CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis } from 'recharts';
+import { useState } from 'react';
+import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+
+import { useChartControllerStore } from '@/stores/chart-controller-store';
 
 const now = Date.now();
 
-const data = [
+const mockData = [
   {
     time: now,
     temp: 24.2,
@@ -47,7 +50,17 @@ const data = [
   },
 ];
 
-const config = {
+const formattedData = mockData
+  .map((data) => ({
+    time: new Date(data.time).toUTCString(),
+    timeAxis: new Date(data.time).toLocaleTimeString(),
+    temp: data.temp.toFixed(1),
+    hum: data.hum.toFixed(1),
+    amt: data.amt.toFixed(0),
+  }))
+  .sort((a, b) => a.time.localeCompare(b.time));
+
+const initialState = {
   humidtyStyle: {
     r: 8,
   },
@@ -58,29 +71,30 @@ const config = {
     bottom: 5,
   },
   yAxisDomain: ['dataMin-5', 'dataMax+5'],
+  xAxisDomain: ['dataMin', 'dataMax'],
 };
 
 export default function Chart() {
-  const formattedData = data
-    .map((d) => ({
-      time: new Date(d.time).toUTCString(),
-      timeAxis: new Date(d.time).toLocaleTimeString(),
-      temp: d.temp.toFixed(1),
-      hum: d.hum.toFixed(1),
-      amt: d.amt.toFixed(0),
-    }))
-    .sort((a, b) => a.time.localeCompare(b.time));
+  const { isHumidityVisible, isTemperatureVisible } = useChartControllerStore((state) => ({
+    isHumidityVisible: state.isHumidityVisible,
+    isTemperatureVisible: state.isTemperatureVisible,
+  }));
+
+  const [chartState, setChartState] = useState(initialState);
+
   return (
-    <div className="h-[600px] w-full">
-      <LineChart width={1200} height={600} data={formattedData} margin={config.chartMarigin}>
+    <ResponsiveContainer>
+      <LineChart width={1200} height={600} data={formattedData} margin={chartState.chartMarigin}>
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="timeAxis" label="Time" />
-        <YAxis domain={config.yAxisDomain} label="Sensor Values" />
+        <XAxis domain={chartState.xAxisDomain} dataKey="timeAxis" label="Time" />
+        <YAxis domain={chartState.yAxisDomain} label="Sensor Values" />
         <Tooltip />
         <Legend />
-        <Line type="monotone" dataKey="hum" stroke="#8884d8" activeDot={config.humidtyStyle} />
-        <Line type="monotone" dataKey="temp" stroke="#82ca9d" />
+        {isHumidityVisible && (
+          <Line type="monotone" dataKey="hum" name="Humidity" stroke="#8884d8" activeDot={chartState.humidtyStyle} />
+        )}
+        {isTemperatureVisible && <Line type="monotone" dataKey="temp" name="Temperature" stroke="#82ca9d" />}
       </LineChart>
-    </div>
+    </ResponsiveContainer>
   );
 }
