@@ -39,10 +39,8 @@ jobs:
           node-version: 20
           cache: 'pnpm'
           cache-dependency-path: 'frontend/pnpm-lock.yaml'
-      - name: Change directory to frontend
-        run: cd frontend
       - name: Install packages
-        run: pnpm install
+        run: cd frontend & pnpm install
       - name: Build
         run: pnpm build
       - name: Setup Pages
@@ -51,7 +49,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload dist repository
-          path: './dist'
+          path: './frontend/dist'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
