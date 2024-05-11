@@ -38,6 +38,7 @@ jobs:
         with:
           node-version: 20
           cache: 'pnpm'
+          cache-dependency-path: 'frontend/pnpm-lock.yaml'
       - name: Change directory to frontend
         run: cd frontend
       - name: Install packages
