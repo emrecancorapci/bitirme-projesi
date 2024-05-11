@@ -28,11 +28,8 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Change Folder
+      - name: Checkout
         uses: actions/checkout@v4
-        with:
-          sparse-checkout: |
-            frontend
       - uses: pnpm/action-setup@v2
         with:
           version: 9.1.0
@@ -41,8 +38,10 @@ jobs:
         with:
           node-version: 20
           cache: 'pnpm'
-      - name: Install pnpm
-        run: pnpm install pnpm@latest
+      - name: Change directory to frontend
+        run: cd frontend
+      - name: Install packages
+        run: pnpm install
       - name: Build
         run: pnpm build
       - name: Setup Pages
