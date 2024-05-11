@@ -33,6 +33,9 @@ jobs:
         with:
           sparse-checkout: |
             frontend
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9.1.0
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
