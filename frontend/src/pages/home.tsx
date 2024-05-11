@@ -9,7 +9,7 @@ export default function Home() {
       </div>
       <div className="col-span-5 flex flex-col gap-4 lg:col-span-1">
         <h2 className="text-4xl font-bold text-foreground">Chart Settings</h2>
-        <div className="grow rounded-lg border bg-background shadow-sm">
+        <div className="grow rounded-lg border border-border bg-background shadow-sm">
           <ChartController />
         </div>
       </div>

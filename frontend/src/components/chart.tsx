@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { CartesianGrid, Label, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 import { useChartControllerStore } from '@/stores/chart-controller-store';
+
+import ChartTooltip from './chart-tooltip';
 
 const now = Date.now();
 
@@ -53,7 +55,11 @@ const mockData = [
 const formattedData = mockData
   .map((data) => ({
     time: new Date(data.time).toUTCString(),
-    timeAxis: new Date(data.time).toLocaleTimeString(),
+    timeAxis: new Date(data.time).toLocaleTimeString('tr-TR', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    }),
     temp: data.temp.toFixed(1),
     hum: data.hum.toFixed(1),
     amt: data.amt.toFixed(0),
@@ -65,10 +71,10 @@ const initialState = {
     top: 5,
     right: 30,
     left: 20,
-    bottom: 5,
+    bottom: 20,
   },
   xAxisDomain: ['dataMin', 'dataMax'],
-  yAxisDomain: ['dataMin-5', 'dataMax+5'],
+  yAxisDomain: [20, 40],
 };
 
 export default function Chart() {
@@ -79,25 +85,31 @@ export default function Chart() {
   return (
     <ResponsiveContainer>
       <LineChart width={1200} height={600} data={formattedData} margin={chartState.chartMarigin}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis domain={chartState.xAxisDomain} dataKey="timeAxis" />
+        <CartesianGrid fill="#111" opacity={0.2} />
+        <XAxis domain={chartState.xAxisDomain} dataKey="timeAxis">
+          <Label value="Time" position="insideBottom" offset={-10} />
+        </XAxis>
         <YAxis domain={chartState.yAxisDomain} />
-        <Tooltip />
-        <Legend />
+        <Tooltip content={<ChartTooltip />} />
+        <Legend verticalAlign="top" height={42} />
 
         <Line
           type="monotone"
-          visibility={visibleValues.has('hum') ? 'visible' : 'hidden'}
+          hide={!visibleValues.has('hum')}
           dataKey="hum"
           name="Humidity"
           stroke="#8884d8"
+          strokeWidth={2}
+          unit="%"
         />
         <Line
           type="monotone"
-          visibility={visibleValues.has('temp') ? 'visible' : 'hidden'}
+          hide={!visibleValues.has('temp')}
           dataKey="temp"
           name="Temperature"
           stroke="#82ca9d"
+          strokeWidth={2}
+          unit="°C"
         />
       </LineChart>
     </ResponsiveContainer>
