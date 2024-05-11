@@ -1,17 +1,23 @@
 import { create } from 'zustand';
 
+export type SensorValue = 'hum' | 'temp';
+
 interface ChartControllerState {
-  isHumidityVisible: boolean;
-  isTemperatureVisible: boolean;
-  setIsHumidityVisible: (isVisible: boolean) => void;
-  setIsTemperatureVisible: (isVisible: boolean) => void;
+  visibleValues: Set<SensorValue>;
+  setVisible: (sensorValue: SensorValue, isVisible?: boolean) => void;
+  toggleVisible: (sensorValue: SensorValue) => void;
 }
 
-export const useChartControllerStore = create<ChartControllerState>(function chartControllerStore(set) {
+export const useChartControllerStore = create<ChartControllerState>(function chartControllerStore(set, get) {
   return {
-    isHumidityVisible: true,
-    isTemperatureVisible: true,
-    setIsHumidityVisible: (isVisible: boolean) => set({ isHumidityVisible: isVisible }),
-    setIsTemperatureVisible: (isVisible: boolean) => set({ isTemperatureVisible: isVisible }),
+    visibleValues: new Set(['hum', 'temp']),
+    setVisible: (sensorValue: SensorValue, isVisible: boolean = true) => {
+      set((state) => ({
+        visibleValues: isVisible
+          ? new Set([...state.visibleValues, sensorValue])
+          : new Set([...state.visibleValues].filter((value) => value !== sensorValue)),
+      }));
+    },
+    toggleVisible: (sensorValue: SensorValue) => get().setVisible(sensorValue, !get().visibleValues.has(sensorValue)),
   };
 });

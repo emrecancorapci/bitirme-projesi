@@ -61,24 +61,18 @@ const formattedData = mockData
   .sort((a, b) => a.time.localeCompare(b.time));
 
 const initialState = {
-  humidtyStyle: {
-    r: 8,
-  },
   chartMarigin: {
     top: 5,
     right: 30,
     left: 20,
     bottom: 5,
   },
-  yAxisDomain: ['dataMin-5', 'dataMax+5'],
   xAxisDomain: ['dataMin', 'dataMax'],
+  yAxisDomain: ['dataMin-5', 'dataMax+5'],
 };
 
 export default function Chart() {
-  const { isHumidityVisible, isTemperatureVisible } = useChartControllerStore((state) => ({
-    isHumidityVisible: state.isHumidityVisible,
-    isTemperatureVisible: state.isTemperatureVisible,
-  }));
+  const visibleValues = useChartControllerStore((state) => state.visibleValues);
 
   const [chartState, setChartState] = useState(initialState);
 
@@ -86,14 +80,25 @@ export default function Chart() {
     <ResponsiveContainer>
       <LineChart width={1200} height={600} data={formattedData} margin={chartState.chartMarigin}>
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis domain={chartState.xAxisDomain} dataKey="timeAxis" label="Time" />
-        <YAxis domain={chartState.yAxisDomain} label="Sensor Values" />
+        <XAxis domain={chartState.xAxisDomain} dataKey="timeAxis" />
+        <YAxis domain={chartState.yAxisDomain} />
         <Tooltip />
         <Legend />
-        {isHumidityVisible && (
-          <Line type="monotone" dataKey="hum" name="Humidity" stroke="#8884d8" activeDot={chartState.humidtyStyle} />
-        )}
-        {isTemperatureVisible && <Line type="monotone" dataKey="temp" name="Temperature" stroke="#82ca9d" />}
+
+        <Line
+          type="monotone"
+          visibility={visibleValues.has('hum') ? 'visible' : 'hidden'}
+          dataKey="hum"
+          name="Humidity"
+          stroke="#8884d8"
+        />
+        <Line
+          type="monotone"
+          visibility={visibleValues.has('temp') ? 'visible' : 'hidden'}
+          dataKey="temp"
+          name="Temperature"
+          stroke="#82ca9d"
+        />
       </LineChart>
     </ResponsiveContainer>
   );

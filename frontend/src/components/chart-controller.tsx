@@ -2,17 +2,23 @@ import { useCallback } from 'react';
 
 import { useChartControllerStore } from '@/stores/chart-controller-store';
 
-import { Button } from './ui/button';
+import Button from './ui/button';
 import VisibilitySwitch from './visibility-switch';
 
 export default function ChartController() {
-  const { isHumidityVisible, isTemperatureVisible, setIsHumidityVisible, setIsTemperatureVisible } =
-    useChartControllerStore();
+  const { visibleValues, toggleVisible, setVisible } = useChartControllerStore();
+  useChartControllerStore();
+
+  const isHumidityVisible = visibleValues.has('hum');
+  const isTemperatureVisible = visibleValues.has('temp');
+
+  const toggleHumidity = useCallback(() => toggleVisible('hum'), [toggleVisible]);
+  const toggleTemperature = useCallback(() => toggleVisible('temp'), [toggleVisible]);
 
   const setAllVisible = useCallback(() => {
-    setIsHumidityVisible(true);
-    setIsTemperatureVisible(true);
-  }, [setIsHumidityVisible, setIsTemperatureVisible]);
+    setVisible('hum', true);
+    setVisible('temp', true);
+  }, [setVisible]);
 
   return (
     <div className="grid grid-cols-1 flex-row gap-4 p-4 font-light text-primary">
@@ -26,8 +32,8 @@ export default function ChartController() {
           All
         </Button>
       </div>
-      <VisibilitySwitch label="Humidity" isVisible={isHumidityVisible} setVisible={setIsHumidityVisible} />
-      <VisibilitySwitch label="Temperature" isVisible={isTemperatureVisible} setVisible={setIsTemperatureVisible} />
+      <VisibilitySwitch label="Humidity" isVisible={isHumidityVisible} onToggle={toggleHumidity} />
+      <VisibilitySwitch label="Temperature" isVisible={isTemperatureVisible} onToggle={toggleTemperature} />
     </div>
   );
 }
