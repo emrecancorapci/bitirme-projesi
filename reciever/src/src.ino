@@ -1,34 +1,62 @@
-#include "data-storage.h"
+#define LDR_PIN A0
+#define LIGHT_THRESHOLD 100 // Depends on the light intensity of the room
+#define LAMBDA 5 // Must be same with the transmitter
 
-const DataStorage* dataStorage = new DataStorage();
-String buffer;
+bool previous_state;
+bool current_state;
 
-void setup()
-{
-  Serial.begin(115200);
+int index = 0;
+char buffer[7];
 
-  while (!Serial.available())
-  {
-    delay(100);
-  }
-  while (!Serial.availableForWrite())
-  {
-    delay(100);
-  }
+int index2 = 0;
+int light_intensities[20];
 
+void setup() {
+  Serial.begin(9600);
 }
 
-void loop()
-{
-  if (Serial.available() > 0)
-  {
-    buffer = Serial.readString();
-    // dataStorage->addUnparsedData(buffer);
+void loop() {
+  current_state = read_comm();
+
+  if (!current_state && previous_state) {
+    char byte_received = get_byte();
+    // Serial.print("Received byte: ");
+    // Serial.println(byte_received);
+    fill_buffer(byte_received);
   }
-  if (Serial.availableForWrite() > 0)
-  {
+
+  previous_state = current_state;
+}
+
+bool read_comm() {
+  int voltage = analogRead(LDR_PIN);
+  light_intensities[index2] = voltage;
+  index2++;
+  if (index2 > 19) {
+    index2 = 0;
+  }
+  return voltage > LIGHT_THRESHOLD ? true : false;
+}
+
+char get_byte() {
+  char character = 0;
+  delay(LAMBDA * 1.5);
+  for (int i = 0; i < 8; i++) {
+    character = character | read_comm() << i;
+    delay(LAMBDA);
+  }
+  return character;
+}
+
+void fill_buffer(const char& ch) {
+  if(ch == '*') {
+    index = 0;
+    // Serial.print("Received buffer: ");
     Serial.println(buffer);
-    // Serial.print(dataStorage->getMessageBuffer());
-    // dataStorage->printData();
+  } else if(index < 7) {
+    buffer[index] = ch;
+    index++;
+  } else {
+    Serial.println("ERR: Buffer is full");
   }
 }
