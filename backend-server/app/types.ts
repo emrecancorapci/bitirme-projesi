@@ -1,5 +1,13 @@
+import { ObjectId } from 'mongodb';
+
 export interface SensorData {
-  sensorId: string;
+  sensorName: string;
   value: number;
-  date: Date;
+}
+
+export interface DataObject {
+  sensorData: SensorData[];
+  dateStart: Date;
+  dateEnd: Date;
+  id?: ObjectId;
 }

@@ -3,20 +3,12 @@ import * as mongoDb from 'mongodb';
 
 import { collections } from './config/mongodb.ts';
 import errorHandler from './error-handler.ts';
-
-class SensorData {
-  constructor(
-    public sensorId: string,
-    public value: number,
-    public date: Date,
-    public id?: mongoDb.ObjectId
-  ) {}
-}
+import { DataObject, SensorData } from './types.ts';
 
 type ErrorResponse = { message: string };
 
 type GetParameters = { minDate: string; maxDate: string };
-type GetResponseBody = { data: SensorData[] };
+type GetResponseBody = DataObject;
 
 export async function get(
   request: Request<GetParameters, GetResponseBody | ErrorResponse>,
@@ -30,9 +22,19 @@ export async function get(
           $lt: new Date(request.params.maxDate),
         },
       })
-      .toArray()) as unknown as SensorData[];
+      .toArray()) as unknown as DataObject[];
 
-    return response.status(200).send({ data });
+    const formattedData = {
+      // eslint-disable-next-line unicorn/no-array-reduce
+      sensorData: data.reduce((accumulator, current) => {
+        accumulator = [...accumulator, ...current.sensorData];
+        return accumulator;
+      }, [] as SensorData[]),
+      dateStart: data[0].dateStart,
+      dateEnd: data.at(-1)?.dateEnd || new Date(Date.now()),
+    };
+
+    return response.status(200).send(formattedData);
   } catch (error: unknown) {
     const { code, message } = errorHandler(error);
     return response.status(code).send({ message });
@@ -40,7 +42,7 @@ export async function get(
 }
 
 type PostParameters = void;
-type PostRequestBody = SensorData;
+type PostRequestBody = DataObject;
 
 interface PostResponseBody {
   id: mongoDb.ObjectId;

@@ -18,11 +18,11 @@ export async function connectToDatabase() {
 
   const database: mongoDB.Db = client.db('sensors');
 
-  const gamesCollection: mongoDB.Collection = database.collection('data-test');
+  const dataCollection: mongoDB.Collection = database.collection('data-test');
 
-  collections.data = gamesCollection;
+  collections.data = dataCollection;
 
   console.log(
-    `Successfully connected to database: ${database.databaseName} and collection: ${gamesCollection.collectionName}`
+    `Successfully connected to database: ${database.databaseName} and collection: ${dataCollection.collectionName}`
   );
 }
