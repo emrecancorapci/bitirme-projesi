@@ -1,43 +1,24 @@
-#include <SimpleDHT.h>
-#include "data-controller.h"
-
-#define PIN_DHT 2
-
-DataController *dataController = new DataController();
-SimpleDHT11 dht(PIN_DHT);
-
-byte dhtTemp = 0;
-byte dhtHumid = 0;
-
+#include "config.h"
+#include "dht.h"
+#include "communication.h"
 
 void setup()
 {
   Serial.begin(9600);
-
-  while (!Serial.availableForWrite())
-  {
-    delay(100);
-  }
-  Serial.println("SR_RDY");
+  pinMode(PIN_LED, OUTPUT);
 }
 
 void loop()
 {
-  if (Serial.availableForWrite() > 0)
-  {
-    getDHTSensorValues();
-    dataController->sendData("TMP", dhtTemp);
-    delay(1000);
-    dataController->sendData("HUM", dhtHumid);
-    delay(1000);
-  }
+  sendDHTReading();
+  delay(COMM_DELAY);
 }
 
-void getDHTSensorValues() {
-  int err = SimpleDHTErrSuccess;
-    if ((err = dht.read(&dhtTemp, &dhtHumid, NULL)) != SimpleDHTErrSuccess) {
-    Serial.print("DHT Error="); Serial.print(SimpleDHTErrCode(err));
-    Serial.print(","); Serial.println(SimpleDHTErrDuration(err)); delay(2000);
-    return;
-  }
+void sendDHTReading()
+{
+  runDHTSensor();
+  DHTReading values = getDHTSensorValues();
+
+  Communication::send_string("TP", values.temp);
+  Communication::send_string("HD", values.humidity);
 }
