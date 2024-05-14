@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import * as mongoDb from 'mongodb';
 
 import { collections } from './config/mongodb.ts';
+import errorHandler from './error-handler.ts';
 
 class SensorData {
   constructor(
@@ -33,8 +34,8 @@ export async function get(
 
     return response.status(200).send({ data });
   } catch (error: unknown) {
-    console.error(error);
-    return response.status(500).send({ message: 'Error retrieving sensor data' });
+    const { code, message } = errorHandler(error);
+    return response.status(code).send({ message });
   }
 }
 
@@ -56,7 +57,7 @@ export async function post(
 
     return response.status(201).send({ message: 'Sensor data saved', id: result.insertedId });
   } catch (error: unknown) {
-    console.error(error);
-    return response.status(500).send({ message: 'Error saving sensor data' });
+    const { code, message } = errorHandler(error);
+    return response.status(code).send({ message });
   }
 }
