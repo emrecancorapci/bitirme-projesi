@@ -3,9 +3,9 @@
 /**
  * Class to read the air quality sensor (MQ135)
  * 
- * @class Air
+ * @class AirQuality
 */
-class Air
+class AirQuality
 {
 private:
     int ppm = 0;
