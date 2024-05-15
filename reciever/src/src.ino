@@ -2,11 +2,15 @@
 #define LIGHT_THRESHOLD 100 // Depends on the light intensity of the room
 #define LAMBDA 5 // Must be same with the transmitter
 
+#define START_CHAR '*'
+#define START_STRING "=START="
+
 bool previous_state;
 bool current_state;
 
 int index = 0;
 char buffer[7];
+char bufferList[20][7];
 
 int index2 = 0;
 int light_intensities[20];
@@ -20,8 +24,6 @@ void loop() {
 
   if (!current_state && previous_state) {
     char byte_received = get_byte();
-    // Serial.print("Received byte: ");
-    // Serial.println(byte_received);
     fill_buffer(byte_received);
   }
 
@@ -49,14 +51,29 @@ char get_byte() {
 }
 
 void fill_buffer(const char& ch) {
-  if(ch == '*') {
+  if(ch == START_CHAR) {
     index = 0;
-    // Serial.print("Received buffer: ");
-    Serial.println(buffer);
+    if(buffer == START_STRING) { 
+      print_buffer_list();
+      empty_buffer_list();
+    }
   } else if(index < 7) {
     buffer[index] = ch;
     index++;
   } else {
     Serial.println("ERR: Buffer is full");
+  }
+}
+
+void print_buffer_list() {
+  for(int i = 0; i < 20; i++) {
+    Serial.print(bufferList[i]);
+    Serial.print("\r\n");
+  }
+}
+
+void empty_buffer_list() {
+  for(int i = 0; i < 20; i++) {
+    bufferList[i][0] = '\0';
   }
 }
