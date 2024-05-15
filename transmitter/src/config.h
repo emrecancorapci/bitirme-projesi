@@ -19,3 +19,4 @@
 // Communication
 #define PERIOD 5 // Lesser than 5 ms does not work with photoresistor
 #define COMM_DELAY 1000 // Delay between sending data
+#define START_STRING "=START="
