@@ -2,40 +2,75 @@
 
 class Communication
 {
-  static char buffer[7];
-  static char floatBuffer[7];
+  char buffer[7];
+  char floatBuffer[7];
 
-  static inline void send_byte(char my_byte)
+  void send_byte_to_pin(const char &my_byte)
   {
-    digitalWrite(PIN_LED, LOW);
+    // Send high pulse for period
+    digitalWrite(PIN_COMM, LOW);
     delay(PERIOD);
 
     for (int i = 0; i < 8; i++)
     {
-      digitalWrite(PIN_LED, (my_byte & (0x01 << i)) != 0);
+      // Send bit for period
+      digitalWrite(PIN_COMM, (my_byte & (0x01 << i)) != 0);
       delay(PERIOD);
     }
 
-    digitalWrite(PIN_LED, HIGH);
+    digitalWrite(PIN_COMM, HIGH);
     delay(PERIOD);
   }
 
-  static inline void storeValue(const char *name, const float &value)
+  void store_float(const char *name, const float &value)
   {
     int width = 4;
     int precision = 3;
-    dtostrf(value, width, precision, floatBuffer);  // Convert float to string
-    sprintf(buffer, "*%s%s", name, floatBuffer);    // Format string
+    dtostrf(value, width, precision, floatBuffer); // Convert float to string
+    sprintf(buffer, "*%s%s", name, floatBuffer);   // Format string
+  }
+
+  void store_byte(const char *name, const byte &value)
+  {
+    sprintf(buffer, "*%s%d", name, value); // Format string
+  }
+
+  void store_bool(const char *name, const bool &value)
+  {
+    sprintf(buffer, "*%s%d", name, value ? 'TRUE' : 'FLSE'); // Format string
   }
 
 public:
-  static void send_string(const char *name, const float &value)
+  void init()
   {
-    storeValue(name, value);
+    pinMode(PIN_COMM, OUTPUT);
+  }
+
+  void send_float(const char *name, const float &value)
+  {
+    store_float(name, value);
 
     for (int i = 0; i < 8; i++)
     {
-      send_byte(buffer[i]);
+      send_byte_to_pin(buffer[i]);
+    }
+  }
+  void send_byte(const char *name, const byte &value)
+  {
+    store_byte(name, value);
+
+    for (int i = 0; i < 8; i++)
+    {
+      send_byte_to_pin(buffer[i]);
+    }
+  }
+  void send_bool(const char *name, const bool &value)
+  {
+    store_bool(name, value);
+
+    for (int i = 0; i < 8; i++)
+    {
+      send_byte_to_pin(buffer[i]);
     }
   }
 };

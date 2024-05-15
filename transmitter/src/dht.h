@@ -1,27 +1,34 @@
 #include <SimpleDHT.h>
 #include "config.h"
 
-SimpleDHT11 dht(PIN_DHT);
+class DHTReader
+{
+  byte dhtTemp = 0;
+  byte dhtHumid = 0;
 
-byte dhtTemp = 0;
-byte dhtHumid = 0;
+  SimpleDHT11 dht = SimpleDHT11(PIN_DHT);
 
-struct DHTReading {
-  float temp;
-  float humidity;
-};
-
-void runDHTSensor() {
-  int err = SimpleDHTErrSuccess;
-  if ((err = dht.read(&dhtTemp, &dhtHumid, NULL)) != SimpleDHTErrSuccess) {
-    Serial.print("ERR_DHT-");
-    Serial.print(SimpleDHTErrCode(err));
-    Serial.print(",");
-    Serial.println(SimpleDHTErrDuration(err));
-    return;
+public:
+  void read()
+  {
+    int err = SimpleDHTErrSuccess;
+    if ((err = dht.read(&dhtTemp, &dhtHumid, NULL)) != SimpleDHTErrSuccess)
+    {
+      Serial.print("ERR_DHT-");
+      Serial.print(SimpleDHTErrCode(err));
+      Serial.print(",");
+      Serial.println(SimpleDHTErrDuration(err));
+      return;
+    }
   }
-}
 
-DHTReading getDHTSensorValues() {
-    return {dhtTemp, dhtHumid};
+  byte get_temp()
+  {
+    return dhtTemp;
+  }
+
+  byte get_humidity()
+  {
+    return dhtHumid;
+  }
 };
