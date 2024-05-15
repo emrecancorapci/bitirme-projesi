@@ -31,4 +31,9 @@ public:
   {
     return dhtHumid;
   }
+
+  bool temp_passed_threshold() {
+    return dhtTemp > TEMPERATURE_THRESHOLD;
+  }
+  
 };

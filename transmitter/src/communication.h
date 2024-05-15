@@ -46,6 +46,13 @@ public:
     pinMode(PIN_COMM, OUTPUT);
   }
 
+  void send_string(const char *string) {
+    for (int i = 0; i < strlen(string); i++)
+    {
+      send_byte_to_pin(string[i]);
+    }
+  }
+
   void send_float(const char *name, const float &value)
   {
     store_float(name, value);
