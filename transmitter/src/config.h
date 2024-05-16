@@ -20,3 +20,11 @@
 #define PERIOD 5 // Lesser than 5 ms does not work with photoresistor
 #define COMM_DELAY 1000 // Delay between sending data
 #define START_STRING "=START="
+
+// Data tags
+#define TAG_TEMP "TP"
+#define TAG_HUMIDITY "HD"
+#define TAG_GROUND_HUMIDITY "GH"
+#define TAG_AIR_QUALITY "AQ"
+#define TAG_GH_PASSED "GT"
+#define TAG_MOTOR_RUNNING "MT"

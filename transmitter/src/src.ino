@@ -51,10 +51,10 @@ void read_sensors() {
 
 void send_values() {
   comm.send_string(START_STRING); 
-  comm.send_float("TP", dht.get_temp()); // Temperature (C)
-  comm.send_byte("HD", dht.get_humidity()); // Humidity (%)
-  comm.send_byte("GH", gnd_hum.get_value()); // Ground Humidity (%)
-  comm.send_byte("AQ", air.get_value()); // Air Quality (ppm)
-  comm.send_bool("GT", gnd_hum.is_in_threshold()); // Ground Humidity in threshold
-  comm.send_bool("MT", motor.is_running()); // Motor running
+  comm.send_float(TAG_TEMP, dht.get_temp()); // Temperature (C)
+  comm.send_byte(TAG_HUMIDITY, dht.get_humidity()); // Humidity (%)
+  comm.send_byte(TAG_GROUND_HUMIDITY, gnd_hum.get_value()); // Ground Humidity (%)
+  comm.send_byte(TAG_AIR_QUALITY, air.get_value()); // Air Quality (ppm)
+  comm.send_bool(TAG_GH_PASSED, gnd_hum.is_in_threshold()); // Ground Humidity in threshold
+  comm.send_bool(TAG_MOTOR_RUNNING, motor.is_running()); // Motor running
 }
