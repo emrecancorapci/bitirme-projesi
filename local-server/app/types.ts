@@ -1,21 +1,9 @@
 export interface SensorData {
-  sensorName: string;
+  id: number;
   value: number;
 }
 
-export interface DataObject {
-  sensorData: SensorData[];
-  dateStart: Date;
-  dateEnd: Date;
-}
-
-export interface TemporaryDatabase {
-  dateStart?: Date;
-  dateEnd?: Date;
-  data: TemporaryDataChunk[];
-}
-
-export interface TemporaryDataChunk {
+export interface DataChunk {
   date: Date;
   sensorData: SensorData[];
 }
