@@ -1,29 +1,19 @@
-import { ObjectId } from 'mongodb';
-
-export interface SensorData {
-  sensorName: string;
-  value: number;
-}
-
-export interface DataObject {
-  sensorData: SensorData[];
-  dateStart: Date;
-  dateEnd: Date;
-  id?: ObjectId;
-}
-
 export interface DatabaseSensorData {
   id: number;
+  sensorId: number;
   value: number;
+  time: number;
 }
 
-export interface Sensor {
+export interface DatabaseSensor {
   id: number;
   name: string;
-  short: string;
+  short: string | null;
+  unit: string | null;
 }
 
-export interface DataChunkRequest {
-  date: Date;
-  sensorData: SensorData[];
+export interface SensorData {
+  sensorId: number;
+  value: number;
+  time: number;
 }
