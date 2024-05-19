@@ -1,14 +1,23 @@
-import { DataChunk, SensorData } from './types';
+import { SensorData } from './types';
 
-const temporaryDatabase: DataChunk[] = [];
+let temporaryDatabase: SensorData[] = [];
+
+const FETCH_LIMIT = 100;
 
 export async function postSensorData(data: string, uri: string): Promise<void> {
-  const sensorData = data.toString().split('\r\n');
-  if (sensorData.length < 2) return console.error('Invalid data format:', sensorData);
+  const rawSensorData = data.toString().split('\r\n');
 
-  pushToTemporaryDatabase(sensorData);
+  if (rawSensorData.length < 2) return console.error('Invalid data format:', data);
 
-  if (temporaryDatabase.length > 100) {
+  for (const sensorData of rawSensorData) {
+    temporaryDatabase.push({
+      sensorId: getSensorName(sensorData.slice(0, 2)),
+      value: Number.parseFloat(sensorData.slice(2).trim()),
+      date: new Date(),
+    });
+  }
+
+  if (temporaryDatabase.length > FETCH_LIMIT) {
     await fetch(`${uri}/sensor-data`, {
       method: 'POST',
       headers: {
@@ -19,23 +28,9 @@ export async function postSensorData(data: string, uri: string): Promise<void> {
       .then((response) => response.json())
       .then((data) => console.log(data))
       .catch((error: Error) => console.error(error));
+
+    temporaryDatabase = [];
   }
-}
-
-function pushToTemporaryDatabase(sensorData: string[]): void {
-  const dataChunk: SensorData[] = [];
-
-  for (const sensorDatum of sensorData) {
-    dataChunk.push({
-      id: getSensorName(sensorDatum.slice(0, 2)),
-      value: Number.parseFloat(sensorDatum.slice(2).trim()),
-    });
-  }
-
-  temporaryDatabase.push({
-    date: new Date(),
-    sensorData: dataChunk,
-  });
 }
 
 function getSensorName(name: string): number {
