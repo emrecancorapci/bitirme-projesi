@@ -19,5 +19,5 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["./app/**/*.ts"]
+  "include": ["./app/**/*.ts", "drizzle.config.ts", "drizzle.migrate.tsgrate.ts", ]
 }
