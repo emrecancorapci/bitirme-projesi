@@ -1,14 +1,18 @@
 #include <SimpleDHT.h>
-#include "config.h"
 
 class DHTReader
 {
+  int threshold;
   byte dhtTemp = 0;
   byte dhtHumid = 0;
 
-  SimpleDHT11 dht = SimpleDHT11(PIN_DHT);
+  SimpleDHT11 dht;
 
 public:
+  DHTReader(const int &pin, const int& threshold): threshold(threshold){
+    dht = SimpleDHT11(pin);
+  }
+
   void read()
   {
     int err = SimpleDHTErrSuccess;
@@ -33,7 +37,7 @@ public:
   }
 
   bool temp_passed_threshold() {
-    return dhtTemp > TEMPERATURE_THRESHOLD;
+    return dhtTemp > threshold;
   }
   
 };

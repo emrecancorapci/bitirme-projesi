@@ -18,8 +18,8 @@
 
 // Communication
 #define PERIOD 5 // Lesser than 5 ms does not work with photoresistor
-#define COMM_DELAY 1000 // Delay between sending data
-#define START_STRING "=START="
+#define COMM_DELAY 1000 // Delay between strings
+#define ARRAY_START_CHAR '&'
 
 // Data tags
 #define TAG_TEMP "TP"

@@ -6,13 +6,13 @@
 #include "relay.h"
 #include "air.h"
 
-DHTReader dht;
-Communication comm;
-GroundHumidity gnd_hum;
-AirQuality air;
+GroundHumidity gnd_hum = GroundHumidity(APIN_GROUND_HUMIDITY, GROUND_HUMIDITY_THRESHOLD_HIGH, GROUND_HUMIDITY_THRESHOLD_LOW);
+AirQuality air = AirQuality(PIN_MQ135, APIN_MQ135, MQ135_THRESHOLD);
+DHTReader dht = DHTReader(PIN_DHT, TEMPERATURE_THRESHOLD);
+Communication comm = Communication(PIN_COMM, PERIOD);
 
-Relay relay;
-Motor motor;
+Motor motor = Motor(PIN_MOTOR_LOW, PIN_MOTOR_HIGH);
+Relay relay = Relay(PIN_RELAY);
 
 void setup()
 {
@@ -50,7 +50,7 @@ void read_sensors() {
 }
 
 void send_values() {
-  comm.send_string(START_STRING); 
+  comm.send_char(ARRAY_START_CHAR); 
   comm.send_float(TAG_TEMP, dht.get_temp()); // Temperature (C)
   comm.send_byte(TAG_HUMIDITY, dht.get_humidity()); // Humidity (%)
   comm.send_byte(TAG_GROUND_HUMIDITY, gnd_hum.get_value()); // Ground Humidity (%)

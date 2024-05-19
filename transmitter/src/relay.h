@@ -1,18 +1,18 @@
-#include "config.h"
-
 class Relay
 {
+    int pin;
 public:
+    Relay(const int &pin) : pin(pin){}
     void init()
     {
-        pinMode(PIN_RELAY, OUTPUT);
+        pinMode(pin, OUTPUT);
     }
 
     void on() {
-        digitalWrite(PIN_RELAY, HIGH);
+        digitalWrite(pin, HIGH);
     }
 
     void off() {
-        digitalWrite(PIN_RELAY, LOW);
+        digitalWrite(pin, LOW);
     }
 };
