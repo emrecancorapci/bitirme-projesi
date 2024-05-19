@@ -2,6 +2,8 @@
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 
+import * as schema from './schema.ts';
+
 // dotenv.config();
 
 const { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, ENDPOINT_ID } = process.env;
@@ -18,7 +20,7 @@ const queryClient = postgres({
   },
 });
 
-const database = drizzle(queryClient);
+const database = drizzle(queryClient, { schema });
 
 export async function getPgVersion() {
   const result = await queryClient`select version()`;
