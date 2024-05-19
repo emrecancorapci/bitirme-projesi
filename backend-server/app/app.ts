@@ -1,16 +1,11 @@
-import express, { json as expressJson, static as expressStatic } from 'express';
+import express, { json as expressJson } from 'express';
 
-import sensorDataRouter from './sensor-data.router.ts';
+import sensorDataRouter from './module/sensor-data.router.ts';
 
 const app = express();
 
 app.use(expressJson());
-app.use(expressStatic('./public'));
 
 app.use('/api', sensorDataRouter);
-
-// app.use('/api/v1/auth', authRouter);
-
-// app.use(notFoundMiddleware);
 
 export default app;

@@ -11,3 +11,19 @@ export interface DataObject {
   dateEnd: Date;
   id?: ObjectId;
 }
+
+export interface DatabaseSensorData {
+  id: number;
+  value: number;
+}
+
+export interface Sensor {
+  id: number;
+  name: string;
+  short: string;
+}
+
+export interface DataChunkRequest {
+  date: Date;
+  sensorData: SensorData[];
+}
