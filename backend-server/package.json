@@ -6,23 +6,28 @@
 	"license": "MIT",
 	"scripts": {
 		"start": "tsc & node app/server.js",
-		"dev": "tsx ./app/server.ts"
+		"dev": "tsx ./app/server.ts",
+		"generate": "drizzle-kit generate",
+		"migrate": "drizzle-kit migrate"
 	},
 	"dependencies": {
+		"@neondatabase/serverless": "^0.9.3",
 		"axios": "^1.6.8",
 		"dotenv": "^16.4.5",
+		"drizzle-orm": "^0.30.10",
 		"express": "^4.19.2",
-		"mongodb": "^6.6.1"
+		"postgres": "^3.4.4"
 	},
 	"devDependencies": {
 		"@types/express": "^4.17.21",
 		"@types/node": "^20.12.12",
 		"@typescript-eslint/eslint-plugin": "^7.9.0",
 		"@typescript-eslint/parser": "^7.9.0",
+		"drizzle-kit": "^0.21.2",
 		"eslint": "8.57.0",
-		"eslint-config-airbnb-base": "^15.0.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-import-resolver-typescript": "^3.6.1",
+		"eslint-plugin-drizzle": "^0.2.3",
 		"eslint-plugin-import": "^2.29.1",
 		"eslint-plugin-n": "^17.7.0",
 		"eslint-plugin-prettier": "^5.1.3",
@@ -32,7 +37,7 @@
 		"eslint-plugin-simple-import-sort": "^12.1.0",
 		"eslint-plugin-unicorn": "^53.0.0",
 		"prettier": "^3.2.5",
-		"tsx": "^4.10.2",
+		"tsx": "^4.10.5",
 		"typescript": "^5.4.5"
 	},
 	"engines": {

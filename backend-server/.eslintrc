@@ -26,12 +26,14 @@
     "promise",
     "regexp",
     "simple-import-sort",
-    "unicorn"
+    "unicorn",
+    "drizzle"
   ],
   "extends": [
     "eslint:recommended",
-    "plugin:prettier/recommended",
     "plugin:@typescript-eslint/recommended-type-checked",
+    "plugin:prettier/recommended",
+    "plugin:drizzle/recommended",
     "plugin:import/recommended",
     "plugin:import/typescript",
     "plugin:n/recommended",
