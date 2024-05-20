@@ -3,6 +3,7 @@
 #define PIN_MOTOR_HIGH 5
 #define PIN_MOTOR_LOW 6
 #define PIN_MQ135 7
+#define PIN_RELAY_LIGHT 8
 #define PIN_RELAY 12
 #define PIN_COMM 13
 
