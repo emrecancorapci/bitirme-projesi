@@ -1,14 +1,16 @@
 #include "communication_handler.h"
-#include "light_optimizer.h"
+#include "adaptive_light.h"
 
 #define LDR_PIN A0
 #define LAMBDA 5            // Must be same with the transmitter
 
 #define STRING_START_CHAR '*'
-#define ARRAY_START_CHAR '&'
 
-CommunicationHandler commHandler(LDR_PIN, LAMBDA);
-LightOptimizer lightOptimizer;
+#define THRESHOLD_MULTIPLIER 1.2
+#define DEFAULT_THRESHOLD 300
+
+CommunicationHandler comm_handler(LDR_PIN, LAMBDA);
+AdaptiveLight adaptive_light(DEFAULT_THRESHOLD, THRESHOLD_MULTIPLIER);
 
 void setup()
 {
@@ -17,9 +19,9 @@ void setup()
 
 void loop()
 {
-  const int voltage = commHandler.read_voltage();
-  lightOptimizer.read_light(voltage);
+  const int voltage = comm_handler.read_voltage();
+  adaptive_light.read_light(voltage);
 
-  const int threshold = lightOptimizer.get_average();
-  commHandler.read(threshold);
+  const int threshold = adaptive_light.get_adaptive_threshold();
+  comm_handler.read(threshold);
 }

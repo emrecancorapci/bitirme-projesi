@@ -1,30 +1,26 @@
 #ifndef COMMUNICATION_HANDLER_H
 #define COMMUNICATION_HANDLER_H
 
-#define STRING_START_CHAR '*'
-#define ARRAY_START_CHAR '&'
-
 #define BUFFER_SIZE 7
 #define LIST_SIZE 20
 
 class CommunicationHandler
 {
   const int LAMBDA, PIN;
+  const char STRING_START_CHAR = '*';
+
   bool previous_state;
 
-  int current_voltage, threshold;
-  int buffer_index = 0, list_index = 0;
+  int current_voltage, threshold, buffer_index = 0;
 
   char buffer[BUFFER_SIZE];
-  char dataArray[LIST_SIZE][BUFFER_SIZE];
 
-  char read_byte();
   void fill_buffer(const char recieved_byte);
-  void print_data_array();
-  void push_to_data_array();
+  char read_byte();
 
 public:
   CommunicationHandler(const int &pin, const int &lambda) : PIN(pin), LAMBDA(lambda) {}
+  
   void read(const int &threshold);
   int read_voltage();
 };
@@ -90,11 +86,7 @@ void CommunicationHandler::fill_buffer(const char recieved_byte)
   if (recieved_byte == STRING_START_CHAR)
   {
     buffer_index = 0;
-    push_to_data_array();
-  }
-  else if (recieved_byte == ARRAY_START_CHAR)
-  {
-    print_data_array();
+    Serial.print(buffer);
   }
   else if (buffer_index < BUFFER_SIZE)
   {
@@ -103,29 +95,6 @@ void CommunicationHandler::fill_buffer(const char recieved_byte)
   }
   else
   {
-    Serial.println("ERR: Buffer is full");
+    Serial.println("ERR:Buffer is full.");
   }
-}
-/**
- * Print the buffer list then empty it
-*/
-void CommunicationHandler::print_data_array()
-{
-  for (int i = 0; i < LIST_SIZE; i++)
-  {
-    // Print the buffer
-    Serial.print(dataArray[i]);
-    Serial.print("\r\n");
-    // Clean the buffer
-    dataArray[i][0] = 0;
-
-  }
-}
-void CommunicationHandler::push_to_data_array()
-{
-  for (int i = 0; i < LIST_SIZE; i++)
-  {
-    dataArray[list_index][i] = buffer[i];
-  }
-  list_index++;
 }

@@ -5,7 +5,7 @@ class Communication
 
   void send_byte_to_pin(const char &my_byte)
   {
-    // Send high pulse for period
+    // Send low pulse for period
     digitalWrite(pin, LOW);
     delay(period);
 

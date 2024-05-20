@@ -50,7 +50,6 @@ void read_sensors() {
 }
 
 void send_values() {
-  comm.send_char(ARRAY_START_CHAR); 
   comm.send_float(TAG_TEMP, dht.get_temp()); // Temperature (C)
   comm.send_byte(TAG_HUMIDITY, dht.get_humidity()); // Humidity (%)
   comm.send_byte(TAG_GROUND_HUMIDITY, gnd_hum.get_value()); // Ground Humidity (%)
