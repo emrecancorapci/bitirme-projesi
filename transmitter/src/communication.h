@@ -33,7 +33,11 @@ class Communication
   }
   void store_bool(const char *name, const bool &value)
   {
-    sprintf(buffer, "*%s%d", name, value ? 'TRUE' : 'FLSE'); // Format string
+    sprintf(buffer, "*%s%d", name, value ? "TRUE" : "FLSE"); // Format string
+  }
+  void store_int(const char *name, const int &value)
+  {
+    sprintf(buffer, "*%s%d", name, value); // Format string
   }
 
 public:
@@ -80,5 +84,12 @@ public:
   void send_char(const char &value)
   {
     send_byte_to_pin(value);
+  }
+  void send_int(const char *name, const int &value){
+    store_int(name, value);
+    for (int i = 0; i < 8; i++)
+    {
+      send_byte_to_pin(buffer[i]);
+    }
   }
 };

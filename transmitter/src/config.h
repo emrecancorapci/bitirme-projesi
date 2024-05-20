@@ -9,12 +9,15 @@
 // Analog pins
 #define APIN_GROUND_HUMIDITY A0
 #define APIN_MQ135 A1
+#define APIN_LDR A2
+#define APIN_PH A5
 
 // Constants
 #define GROUND_HUMIDITY_THRESHOLD_LOW 70
 #define GROUND_HUMIDITY_THRESHOLD_HIGH 100
 #define MQ135_THRESHOLD 100
-#define TEMPERATURE_THRESHOLD 22.00
+#define TEMPERATURE_THRESHOLD 22
+#define LIGHT_THRESHOLD 90
 
 // Communication
 #define PERIOD 5 // Lesser than 5 ms does not work with photoresistor
@@ -28,3 +31,5 @@
 #define TAG_AIR_QUALITY "AQ"
 #define TAG_GH_PASSED "GT"
 #define TAG_MOTOR_RUNNING "MT"
+#define TAG_PH "PH"
+#define TAG_LIGHT "LT"
