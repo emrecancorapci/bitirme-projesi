@@ -2,14 +2,13 @@
 
 class DHTReader
 {
-  int threshold;
   byte dhtTemp = 0;
   byte dhtHumid = 0;
 
   SimpleDHT11 dht;
 
 public:
-  DHTReader(const int &pin, const int& threshold): threshold(threshold){
+  DHTReader(const int &pin){
     dht = SimpleDHT11(pin);
   }
 
@@ -34,10 +33,6 @@ public:
   byte get_humidity()
   {
     return dhtHumid;
-  }
-
-  bool temp_passed_threshold() {
-    return dhtTemp > threshold;
   }
   
 };

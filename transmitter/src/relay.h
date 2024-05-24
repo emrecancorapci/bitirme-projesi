@@ -1,3 +1,6 @@
+#ifndef RELAY_H
+#define RELAY_H
+
 class Relay
 {
     int pin;
@@ -16,3 +19,5 @@ public:
         digitalWrite(pin, LOW);
     }
 };
+
+#endif

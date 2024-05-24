@@ -19,7 +19,7 @@ void PH::init()
 void PH::read()
 {
   int read = analogRead(pin);
-  value = (float)read * 5.0 / 1024 / 6 * 3.5;
+  value = (float)read * 5.0 * 3.5 / 1024 / 6;
 }
 
 void PH::read_average()
@@ -37,5 +37,5 @@ void PH::read_average()
     avgValue += buf[i];
   }
 
-  value = (float)avgValue * 5.0 / 1024 / 6 * 3.5;
+  value = (float)avgValue * 5.0 * 3.5 / 1024 / 6 ;
 }
