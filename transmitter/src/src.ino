@@ -55,9 +55,9 @@ void control_motors()
   const int dht_temperature = dht.get_temp();
   const int enviroment_light = light.get_value();
 
-  bool is_gh_threshold_passed = ground_humidity > GROUND_HUMIDITY_THRESHOLD;
-  bool is_temperature_passed = dht_temperature > TEMPERATURE_THRESHOLD;
-  bool is_light_threshold_passed = enviroment_light > LIGHT_THRESHOLD;
+  const bool is_gh_threshold_passed = ground_humidity > GROUND_HUMIDITY_THRESHOLD;
+  const bool is_temperature_passed = dht_temperature > TEMPERATURE_THRESHOLD;
+  const bool is_light_threshold_passed = enviroment_light > LIGHT_THRESHOLD;
 
   motor.set(is_gh_threshold_passed);
   relay_fan.set(is_temperature_passed);

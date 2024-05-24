@@ -1,7 +1,7 @@
 class Motor
 {
     int pin_low, pin_high;
-
+    bool current_state = false;
 public:
     Motor(const int &pin_high, const int &pin_low) : pin_low(pin_low), pin_high(pin_high) {}
     void init()
@@ -10,9 +10,12 @@ public:
         pinMode(pin_low, OUTPUT);
     }
 
-    void set(const bool &mode)
+    void set(const bool &state)
     {
-        digitalWrite(pin_high, mode ? HIGH : LOW);
+        if (current_state == state) return;
+
+        current_state = state;
+        digitalWrite(pin_high, state ? HIGH : LOW);
         digitalWrite(pin_low, LOW);
     }
 };
