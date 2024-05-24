@@ -34,9 +34,7 @@ void setup()
 void loop()
 {
   read_sensors();
-
   control_motors();
-
   send_values();
 
   delay(COMM_DELAY);
@@ -53,45 +51,17 @@ void read_sensors()
 
 void control_motors()
 {
-  const int v_gnd = gnd_hum.get_value();
-  const int v_temperature = dht.get_temp();
-  const int v_light = light.get_value();
+  const int ground_humidity = gnd_hum.get_value();
+  const int dht_temperature = dht.get_temp();
+  const int enviroment_light = light.get_value();
 
-  Serial.println();
-  Serial.print("GND");
-  Serial.println(v_gnd);
-  Serial.println(v_gnd > GROUND_HUMIDITY_THRESHOLD);
-  Serial.print("TEMP");
-  Serial.println(v_temperature);
-  Serial.println(v_temperature > TEMPERATURE_THRESHOLD);
-  Serial.print("LIGHT");
-  Serial.println(v_light);
-  Serial.println(v_light > LIGHT_THRESHOLD);
+  bool is_gh_threshold_passed = ground_humidity > GROUND_HUMIDITY_THRESHOLD;
+  bool is_temperature_passed = dht_temperature > TEMPERATURE_THRESHOLD;
+  bool is_light_threshold_passed = enviroment_light > LIGHT_THRESHOLD;
 
-  if (v_gnd > GROUND_HUMIDITY_THRESHOLD)
-  {
-    motor.on();
-  }
-  else
-  {
-    motor.off();
-  }
-  if (v_temperature > TEMPERATURE_THRESHOLD)
-  {
-    relay_fan.on();
-  }
-  else
-  {
-    relay_fan.off();
-  }
-  if (v_light > LIGHT_THRESHOLD)
-  {
-    relay_light.on();
-  }
-  else
-  {
-    relay_light.off();
-  }
+  motor.set(is_gh_threshold_passed);
+  relay_fan.set(is_temperature_passed);
+  relay_light.set(is_light_threshold_passed);
 }
 
 void send_values()

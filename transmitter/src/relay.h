@@ -11,12 +11,8 @@ public:
         pinMode(pin, OUTPUT);
     }
 
-    void on() {
-        digitalWrite(pin, HIGH);
-    }
-
-    void off() {
-        digitalWrite(pin, LOW);
+    void set(const bool &state) {
+        digitalWrite(pin, state ? HIGH : LOW);
     }
 };
 
