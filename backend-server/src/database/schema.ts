@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm';
-import { integer, pgTable, serial, varchar } from 'drizzle-orm/pg-core';
+import { bigint, integer, pgTable, serial, smallint, varchar } from 'drizzle-orm/pg-core';
 
 export const sensors = pgTable('sensors', {
   id: serial('id').primaryKey(),
@@ -17,8 +17,8 @@ export const sensorData = pgTable('sensor_data', {
   sensorId: integer('sensor_id')
     .references(() => sensors.id)
     .notNull(),
-  value: integer('value').notNull(),
-  time: integer('time').notNull(),
+  value: smallint('value').notNull(),
+  time: bigint('time', { mode: 'number' }).notNull(),
 });
 
 export const sensorDataRelations = relations(sensorData, ({ one }) => ({

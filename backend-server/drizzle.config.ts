@@ -10,7 +10,7 @@ if (!PGHOST || !PGDATABASE || !PGUSER || !PGPASSWORD || !ENDPOINT_ID)
   throw new Error('Missing environment variables');
 
 export default defineConfig({
-  schema: './app/database/schema.ts',
+  schema: './src/database/schema.ts',
   out: './drizzle',
   dialect: 'postgresql',
   dbCredentials: {

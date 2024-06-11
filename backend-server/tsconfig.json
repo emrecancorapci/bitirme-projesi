@@ -17,7 +17,10 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    },
   },
-  "include": ["./app/**/*.ts", "drizzle.config.ts", "drizzle.migrate.tsgrate.ts", ]
+  "include": ["src/**/*.ts", "drizzle.config.ts" ]
 }

@@ -17,3 +17,5 @@ export interface SensorData {
   value: number;
   time: number;
 }
+
+export type ErrorResponse = { message: string };
