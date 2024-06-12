@@ -5,11 +5,20 @@ import postgres from 'postgres';
 
 dotenv.config();
 
-const { PG_CONNECT } = process.env;
+const { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, ENDPOINT_ID } = process.env;
 
-if (!PG_CONNECT) throw new Error('Missing environment variables');
-
-const migrationClient = postgres(PG_CONNECT, { max: 1 });
+const migrationClient = postgres({
+  host: PGHOST,
+  database: PGDATABASE,
+  username: PGUSER,
+  password: PGPASSWORD,
+  port: 5432,
+  ssl: 'require',
+  connection: {
+    options: `project=${ENDPOINT_ID}`,
+  },
+  max: 1,
+});
 
 const database = drizzle(migrationClient);
 

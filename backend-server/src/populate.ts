@@ -26,7 +26,9 @@ async function populate() {
 await populate()
   .then((response) => {
     console.log(response);
+    return;
   })
   .catch((error) => {
     console.error(error);
+    return;
   });

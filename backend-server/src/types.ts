@@ -1,8 +1,12 @@
 export interface DatabaseSensorData {
   id: number;
-  sensorId: number;
-  value: number;
   time: number;
+  tp: number | null;
+  hd: number | null;
+  ph: number | null;
+  gh: number | null;
+  aq: number | null;
+  lt: number | null;
 }
 
 export interface DatabaseSensor {
@@ -13,9 +17,13 @@ export interface DatabaseSensor {
 }
 
 export interface SensorData {
-  sensorId: number;
-  value: number;
-  time: number;
+  time: number | string;
+  tp: number | null;
+  hd: number | null;
+  ph: number | null;
+  gh: number | null;
+  aq: number | null;
+  lt: number | null;
 }
 
 export type ErrorResponse = { message: string };

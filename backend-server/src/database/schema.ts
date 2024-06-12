@@ -1,5 +1,4 @@
-import { relations } from 'drizzle-orm';
-import { bigint, integer, pgTable, serial, smallint, varchar } from 'drizzle-orm/pg-core';
+import { bigint, numeric, pgTable, serial, smallint, varchar } from 'drizzle-orm/pg-core';
 
 export const sensors = pgTable('sensors', {
   id: serial('id').primaryKey(),
@@ -8,19 +7,13 @@ export const sensors = pgTable('sensors', {
   unit: varchar('unit', { length: 16 }),
 });
 
-export const sensorsRelations = relations(sensors, ({ many }) => ({
-  data: many(sensorData),
-}));
-
 export const sensorData = pgTable('sensor_data', {
   id: serial('id').primaryKey(),
-  sensorId: integer('sensor_id')
-    .references(() => sensors.id)
-    .notNull(),
-  value: smallint('value').notNull(),
   time: bigint('time', { mode: 'number' }).notNull(),
+  tp: smallint('tp'),
+  hd: smallint('hd'),
+  ph: numeric('ph', { precision: 4, scale: 2 }),
+  gh: smallint('gh'),
+  aq: smallint('aq'),
+  lt: smallint('lt'),
 });
-
-export const sensorDataRelations = relations(sensorData, ({ one }) => ({
-  sensor: one(sensors, { fields: [sensorData.sensorId], references: [sensors.id] }),
-}));
