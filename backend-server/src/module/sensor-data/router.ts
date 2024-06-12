@@ -4,11 +4,11 @@ import { json, Router } from 'express';
 import { getSensorData } from './get.ts';
 import { postSensorData } from './post.ts';
 
-const router = Router();
+const sensorDataRouter = Router();
 
-router.use(json());
+sensorDataRouter.use(json());
 
-router.get('/sensor-data', getSensorData);
-router.post('/sensor-data', postSensorData);
+sensorDataRouter.get('/sensor-data', getSensorData);
+sensorDataRouter.post('/sensor-data', postSensorData);
 
-export default router;
+export { sensorDataRouter };
