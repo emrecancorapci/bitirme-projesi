@@ -1,10 +1,14 @@
 import { Request, Response } from 'express';
 
 import database from '@/database/database.ts';
-import { DatabaseSensor, DatabaseSensorData, ErrorResponse } from '@/types.ts';
+import { ErrorResponse, SensorData } from '@/types.ts';
+
+interface SensorDataResponse extends SensorData {
+  id: number;
+}
 
 type Parameters = void;
-type ResponseBody = { data: DatabaseSensorData[]; sensors: DatabaseSensor[] };
+type ResponseBody = { data: SensorDataResponse[] };
 type RequestBody = void;
 type Queries = { min?: string; max?: string };
 
@@ -19,14 +23,17 @@ export async function getSensorData(
   const thirtyMin = 1_800_000; // 30 * 60 * 1000
 
   const data = await database.query.sensorData.findMany({
-    where: (sensorData, { and, gte, lte }) =>
+    where: ({ time }, { and, gte, lte }) =>
       and(
-        gte(sensorData.time, new Date(min ?? Date.now() - thirtyMin).getTime()),
-        lte(sensorData.time, new Date(max ?? Date.now()).getTime())
+        gte(time, new Date(min ?? Date.now() - thirtyMin).getTime()),
+        lte(time, new Date(max ?? Date.now()).getTime())
       ),
   });
 
-  const sensors = await database.query.sensors.findMany();
+  const formattedData = data.map((data) => ({
+    ...data,
+    ph: Number(data.ph),
+  }));
 
-  return response.status(200).send({ data, sensors });
+  return response.status(200).send({ data: formattedData });
 }
