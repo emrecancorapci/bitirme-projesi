@@ -1,5 +1,4 @@
 export interface SensorData {
-  sensorId: number;
-  value: number;
-  date: Date;
+  date: number;
+  [key: string]: number;
 }
