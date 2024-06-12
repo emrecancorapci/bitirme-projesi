@@ -1,5 +1,5 @@
 {
-  "id": "d9e81cc3-bbd4-4fc8-b321-948dc432b237",
+  "id": "c35d6f7b-9c6f-4b91-abec-9096570cc9b4",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "6",
   "dialect": "postgresql",
@@ -14,41 +14,51 @@
           "primaryKey": true,
           "notNull": true
         },
-        "sensor_id": {
-          "name": "sensor_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "value": {
-          "name": "value",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
         "time": {
           "name": "time",
-          "type": "integer",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tp": {
+          "name": "tp",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hd": {
+          "name": "hd",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ph": {
+          "name": "ph",
+          "type": "numeric(4, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "gh": {
+          "name": "gh",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "aq": {
+          "name": "aq",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lt": {
+          "name": "lt",
+          "type": "smallint",
           "primaryKey": false,
           "notNull": false
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "sensor_data_sensor_id_sensors_id_fk": {
-          "name": "sensor_data_sensor_id_sensors_id_fk",
-          "tableFrom": "sensor_data",
-          "tableTo": "sensors",
-          "columnsFrom": [
-            "sensor_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -66,7 +76,7 @@
           "name": "name",
           "type": "varchar(64)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "short": {
           "name": "short",
